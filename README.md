@@ -1,4 +1,4 @@
-# Lakehouse Data Platform
+# Lakehouse x SuperLake
 
 ## Overview
 
