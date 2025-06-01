@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository is an **example project** designed to show how to build a project leveraging the [superlake](https://github.com/loicmagnien/superlake) library. It implements a modular Lakehouse architecture for ingesting, modeling, and orchestrating data pipelines using PySpark and Delta Lake. It supports multi-source data ingestion (ERP, CRM, open data), transformation into bronze/silver/gold tables, and dimensional modeling for analytics and reporting.
+This repository is an **example project** designed to show how to build a project leveraging the [superlake](https://pypi.org/project/superlake/) library. It implements a modular Lakehouse architecture for ingesting, modeling, and orchestrating data pipelines using PySpark and Delta Lake. It supports multi-source data ingestion (ERP, CRM, open data), transformation into bronze/silver/gold tables, and dimensional modeling for analytics and reporting.
 
 ## Repository Structure
 
