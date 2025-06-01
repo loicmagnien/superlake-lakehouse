@@ -1,4 +1,4 @@
 pyspark==3.5.0
 delta-spark==3.1.0
+superlake>=1.0.0
 requests
-#superlake

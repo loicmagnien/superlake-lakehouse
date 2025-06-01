@@ -13,6 +13,7 @@ if __name__ == "__main__":
     catalog_name = "spark_catalog"
     managed = False
     environment = "prd"
+
     # this is the parent folder of the lakehouse folder
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
@@ -26,14 +27,18 @@ if __name__ == "__main__":
     print(f"environment: {environment}")
     print("-----------------------------------------------------------------------------")
 
-    # create the superlake objects
+    # create the superspark
     super_spark = SuperSpark(
         session_name="SuperSpark for SuperLake",
         warehouse_dir=warehouse_dir,
         external_path=external_path,
         catalog_name=catalog_name
     )
+
+    # create the superlogger
     logger = SuperLogger(name="SuperLake")
+
+    # create the supertracer
     super_tracer = SuperTracer(
         super_spark=super_spark,
         catalog_name=catalog_name,
@@ -43,7 +48,7 @@ if __name__ == "__main__":
         logger=logger
     )
 
-    # orchestrate the pipelines in process_first mode
+    # create the orchestrator
     superlake_dt = datetime.now()
     orchestrator = SuperOrchestrator(
         super_spark=super_spark,
@@ -55,12 +60,14 @@ if __name__ == "__main__":
         environment=environment,
         project_root=project_root
     )
+
+    # orchestrate the pipelines
     orchestrator.orchestrate(
         loading_mode='file',
         orchestration_mode='process_first',
         target_pipelines=['fact_bike_status', 'dim_bike_station'],
         direction='all',
-        parallelize_groups=True,
+        parallelize_groups=False,
         fail_fast=False,
         skip_downstream_on_failure=True
     )
