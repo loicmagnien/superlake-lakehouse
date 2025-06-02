@@ -8,9 +8,27 @@ import os
 if __name__ == "__main__":
 
     # set the superlake parameters
+
+    # ------------------------------------ databricks hive metastore --------------------------------------
+    # warehouse_dir is set with the value of spark.conf.get("spark.sql.warehouse.dir")
+    warehouse_dir = "dbfs:/user/hive/warehouse"
+    external_path = '/mnt/data/external-table/'
+    catalog_name = "spark_catalog"
+
+    # ------------------------------------------- unity catalog -------------------------------------------
+    # warehouse_dir is usually spark.sql("SHOW EXTERNAL LOCATIONS").filter("name = 'metastore_default_location'").select("url").collect()[0][0]
+    # external_path is a value of a existing external location that can be found with spark.sql("SHOW EXTERNAL LOCATIONS")
+    warehouse_dir = "abfss://container@unity_catalog_storage_account.dfs.core.windows.net/UUID/"
+    external_path = 'abfss://container@data_storage_account.dfs.core.windows.net/superlake/data/external-table/'
+    catalog_name = "my_unity_catalog"
+
+    # -------------------------------------------- local spark --------------------------------------------
+    # on spark local, the warehouse_dir and the external_path can be set using absolute or relative paths
     warehouse_dir = "./data/spark-warehouse"
     external_path = "./data/external-table/"
     catalog_name = "spark_catalog"
+
+    # table and environment management
     managed = False
     environment = "prd"
 
