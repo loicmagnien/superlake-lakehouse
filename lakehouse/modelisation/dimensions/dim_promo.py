@@ -24,7 +24,11 @@ def get_model_dim_promo(super_spark, catalog_name, logger, managed, superlake_dt
         pruning_primary_keys=False,
         optimize_table=True,
         logger=logger,
-        managed=managed
+        managed=managed,
+        table_description=(
+            "Dimension table for promotions. Each row represents a unique promotion, including its promo code. "
+            "Used to analyze the impact of promotions on sales."
+        )
     )
 
     def generate_dim_promo(super_spark, catalog_name, logger, managed, superlake_dt):

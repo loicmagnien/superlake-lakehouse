@@ -46,7 +46,8 @@ def get_pipeline_objects_crm_contacts(super_spark, catalog_name, logger, managed
         compression_codec="snappy",
         schema_evolution_option=SchemaEvolution.Merge,
         logger=logger,
-        managed=managed
+        managed=managed,
+        table_description="Raw CRM contacts (generated data)"
     )
 
     # silver table
@@ -71,7 +72,8 @@ def get_pipeline_objects_crm_contacts(super_spark, catalog_name, logger, managed
             "delta.autoOptimize.optimizeWrite": "true",
             "delta.autoOptimize.autoCompact": "true"
         },
-        managed=managed
+        managed=managed,
+        table_description="Cleaned CRM contacts (generated data)"
     )
 
     # cdc function

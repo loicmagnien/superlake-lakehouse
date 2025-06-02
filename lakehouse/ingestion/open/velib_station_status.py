@@ -71,7 +71,8 @@ def get_pipeline_objects_velib_station_status(super_spark, catalog_name, logger,
         compression_codec="snappy",
         schema_evolution_option=SchemaEvolution.Merge,
         logger=logger,
-        managed=managed
+        managed=managed,
+        table_description="Raw Velib station status from Open Data Soft"
     )
 
     silver_velib_status = SuperDeltaTable(
@@ -95,7 +96,8 @@ def get_pipeline_objects_velib_station_status(super_spark, catalog_name, logger,
             "delta.autoOptimize.optimizeWrite": "true",
             "delta.autoOptimize.autoCompact": "true"
         },
-        managed=managed
+        managed=managed,
+        table_description="Cleaned Velib station status from Open Data Soft with SCD type 2"
     )
 
     # CDC function: fetch from API and return as Spark DataFrame

@@ -37,7 +37,12 @@ def get_model_fact_sales(super_spark, catalog_name, logger, managed, superlake_d
         pruning_primary_keys=False,
         optimize_table=True,
         logger=logger,
-        managed=managed
+        managed=managed,
+        table_description=(
+            "Fact table for sales transactions. Each row represents a unique sales order line, including keys to date, customer, "
+            "product, store, and promotion dimensions, as well as sales metrics such as quantity, unit price, discount, cost, "
+            "total price, discount percentage, and profit. Sourced from ERP sales transactions."
+        )
     )
 
     # model function

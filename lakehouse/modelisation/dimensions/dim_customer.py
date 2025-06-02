@@ -28,7 +28,11 @@ def get_model_dim_customer(super_spark, catalog_name, logger, managed, superlake
         pruning_primary_keys=False,
         optimize_table=True,
         logger=logger,
-        managed=managed
+        managed=managed,
+        table_description=(
+            "Dimension table for customers. Each row represents a unique customer, including their ID and name, "
+            "and is used to join sales facts to customer details for customer-centric analysis."
+        )
     )
 
     def generate_dim_customer(super_spark, catalog_name, logger, managed, superlake_dt):

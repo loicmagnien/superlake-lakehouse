@@ -35,7 +35,11 @@ def get_model_dim_bike_station(super_spark, catalog_name, logger, managed, super
         pruning_primary_keys=False,
         optimize_table=True,
         logger=logger,
-        managed=managed
+        managed=managed,
+        table_description=(
+            "Dimension table for bike stations. Each row represents a unique bike station, including its source, ID, name, "
+            "capacity, location, and address. Used to join bike facts to station attributes."
+        )
     )
 
     def generate_dim_bike_station(super_spark, catalog_name, logger, managed, superlake_dt):

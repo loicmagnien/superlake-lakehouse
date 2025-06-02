@@ -29,7 +29,11 @@ def get_model_dim_date(super_spark, catalog_name, logger, managed, superlake_dt)
         pruning_primary_keys=False,
         optimize_table=True,
         logger=logger,
-        managed=managed
+        managed=managed,
+        table_description=(
+            "Date dimension table. Each row represents a unique calendar date, including year, month, day, week, quarter, "
+            "day of week, and weekend flag. Used for time-based analysis and reporting."
+        )
     )
 
     def generate_dim_date(super_spark, catalog_name, logger, managed, superlake_dt):

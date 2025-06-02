@@ -56,7 +56,8 @@ def get_pipeline_objects_velov_station_info(super_spark, catalog_name, logger, m
         compression_codec="snappy",
         schema_evolution_option=SchemaEvolution.Merge,
         logger=logger,
-        managed=managed
+        managed=managed,
+        table_description="Raw Velov station info from Grand Lyon"
     )
 
     # Silver table
@@ -84,7 +85,8 @@ def get_pipeline_objects_velov_station_info(super_spark, catalog_name, logger, m
             "delta.autoOptimize.optimizeWrite": "true",
             "delta.autoOptimize.autoCompact": "true"
         },
-        managed=managed
+        managed=managed,
+        table_description="Cleaned Velov station info from Grand Lyon with SCD type 2"
     )
 
     # CDC function: fetch from API and return as Spark DataFrame

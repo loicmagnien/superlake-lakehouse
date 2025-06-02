@@ -27,7 +27,11 @@ def get_model_dim_store(super_spark, catalog_name, logger, managed, superlake_dt
         pruning_primary_keys=False,
         optimize_table=True,
         logger=logger,
-        managed=managed
+        managed=managed,
+        table_description=(
+            "Dimension table for stores. Each row represents a unique store, including its ID, name, city, and state. "
+            "Used to join sales facts to store attributes for reporting and analysis."
+        )
     )
 
     def generate_dim_store(super_spark, catalog_name, logger, managed, superlake_dt):

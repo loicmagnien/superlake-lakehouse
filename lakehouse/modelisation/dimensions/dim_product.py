@@ -27,7 +27,11 @@ def get_model_dim_product(super_spark, catalog_name, logger, managed, superlake_
         pruning_primary_keys=False,
         optimize_table=True,
         logger=logger,
-        managed=managed
+        managed=managed,
+        table_description=(
+            "Dimension table for products. Each row represents a unique product, including its ID, name, category, and brand. "
+            "Used to enrich sales facts with product details."
+        )
     )
 
     def generate_dim_product(super_spark, catalog_name, logger, managed, superlake_dt):
