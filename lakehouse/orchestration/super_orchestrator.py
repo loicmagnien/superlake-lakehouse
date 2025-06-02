@@ -2,6 +2,7 @@ from datetime import datetime
 from superlake.core.orchestration import SuperOrchestrator
 from superlake.core import SuperSpark, SuperTracer
 from superlake.monitoring import SuperLogger
+from superlake.utils import SuperCataloguer
 import os
 
 
@@ -28,12 +29,15 @@ if __name__ == "__main__":
     external_path = "./data/external-table/"
     catalog_name = "spark_catalog"
 
+    # this is the parent folder of the lakehouse folder
+    # databricks
+    project_root = "/Workspace/Repos/projects/superlake-lakehouse/lakehouse"
+    # local spark
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
+
     # table and environment management
     managed = False
     environment = "prd"
-
-    # this is the parent folder of the lakehouse folder
-    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
 
     # display the parameters
     print("-----------------------------------------------------------------------------")
@@ -66,8 +70,10 @@ if __name__ == "__main__":
         logger=logger
     )
 
-    # create the orchestrator
+    # set the superlake_dt
     superlake_dt = datetime.now()
+
+    # create the orchestrator
     orchestrator = SuperOrchestrator(
         super_spark=super_spark,
         catalog_name=catalog_name,
@@ -79,7 +85,7 @@ if __name__ == "__main__":
         project_root=project_root
     )
 
-    # orchestrate the pipelines
+    # orchestrate the pipelines for bikes
     orchestrator.orchestrate(
         loading_mode='file',
         orchestration_mode='process_first',
@@ -88,4 +94,32 @@ if __name__ == "__main__":
         parallelize_groups=False,
         fail_fast=False,
         skip_downstream_on_failure=True
+    )
+
+    # set the superlake_dt
+    superlake_dt = datetime.now()
+
+    # orchestrate all the pipelines
+    orchestrator.orchestrate(
+        loading_mode='file',
+        orchestration_mode='process_first',
+        target_pipelines=[],
+        direction='all',
+        parallelize_groups=False,
+        fail_fast=False,
+        skip_downstream_on_failure=True
+    )
+
+    # create the supercataloguer
+    super_cataloguer = SuperCataloguer(project_root=project_root)
+
+    # update all the tables descriptions and columns comments
+    super_cataloguer.execute(
+        super_spark=super_spark,
+        catalog_name=catalog_name,
+        logger=logger,
+        managed=managed,
+        superlake_dt=superlake_dt,
+        register_tables=False,
+        change_table_and_columns_comments=True,
     )
