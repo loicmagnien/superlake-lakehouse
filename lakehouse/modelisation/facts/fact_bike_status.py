@@ -36,9 +36,23 @@ def get_model_fact_bike_status(super_spark, catalog_name, logger, managed, super
         optimize_table=True,
         logger=logger,
         managed=managed,
+        foreign_keys=[
+            {
+                "fk_columns": ["station_key"],
+                "ref_table": f"{catalog_name}.04_dwh.dim_bike_station",
+                "ref_columns": ["station_key"],
+                "fk_name": None
+            },
+            {
+                "fk_columns": ["date_key"],
+                "ref_table": f"{catalog_name}.04_dwh.dim_date",
+                "ref_columns": ["date_key"],
+                "fk_name": None
+            },
+        ],
         table_description=(
             "Fact table for bike station status. Each row represents a snapshot of a bike station's status at a specific timestamp, "
-            "including available docks, available bikes, mechanical and electric bikes, and operational flags. Includes keys to "
+            'including available docks, available bikes, mechanical and electric bikes, and operational flags. Includes keys to '
             "station and date dimensions. Sourced from Velib and Velov station status APIs."
         )
     )

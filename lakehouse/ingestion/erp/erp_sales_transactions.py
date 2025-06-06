@@ -51,7 +51,8 @@ def get_pipeline_objects_erp_sales_transactions(super_spark, catalog_name, logge
             compression_codec="snappy",
             schema_evolution_option=SchemaEvolution.Merge,
             logger=logger,
-            managed=managed
+            managed=managed,
+            table_description="Raw ERP sales transactions (generated data)"
         )
 
     # silver table
@@ -76,7 +77,8 @@ def get_pipeline_objects_erp_sales_transactions(super_spark, catalog_name, logge
                 "delta.autoOptimize.optimizeWrite": "true",
                 "delta.autoOptimize.autoCompact": "true"
             },
-            managed=managed
+            managed=managed,
+            table_description="Cleaned ERP sales transactions (generated data)"
         )
 
     # cdc function

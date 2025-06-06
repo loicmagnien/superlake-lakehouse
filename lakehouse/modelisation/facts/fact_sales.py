@@ -38,6 +38,38 @@ def get_model_fact_sales(super_spark, catalog_name, logger, managed, superlake_d
         optimize_table=True,
         logger=logger,
         managed=managed,
+        foreign_keys=[
+            {
+                "fk_columns": ["date_key"],
+                "ref_table": f"{catalog_name}.04_dwh.dim_date",
+                "ref_columns": ["date_key"],
+                "fk_name": None
+            },
+            {
+                "fk_columns": ["customer_key"],
+                "ref_table": f"{catalog_name}.04_dwh.dim_customer",
+                "ref_columns": ["customer_key"],
+                "fk_name": None
+            },
+            {
+                "fk_columns": ["product_key"],
+                "ref_table": f"{catalog_name}.04_dwh.dim_product",
+                "ref_columns": ["product_key"],
+                "fk_name": None
+            },
+            {
+                "fk_columns": ["store_key"],
+                "ref_table": f"{catalog_name}.04_dwh.dim_store",
+                "ref_columns": ["store_key"],
+                "fk_name": None
+            },
+            {
+                "fk_columns": ["promo_key"],
+                "ref_table": f"{catalog_name}.04_dwh.dim_promo",
+                "ref_columns": ["promo_key"],
+                "fk_name": None
+            },
+        ],
         table_description=(
             "Fact table for sales transactions. Each row represents a unique sales order line, including keys to date, customer, "
             "product, store, and promotion dimensions, as well as sales metrics such as quantity, unit price, discount, cost, "

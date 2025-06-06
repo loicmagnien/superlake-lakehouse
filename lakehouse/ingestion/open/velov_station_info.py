@@ -110,6 +110,7 @@ def get_pipeline_objects_velov_station_info(super_spark, catalog_name, logger, m
             for station in stations
         ]
         df = spark.createDataFrame(rows, schema=source_velov_station_info_schema)
+        df = df.filter(F.col("station_id").isNotNull())
         return df
 
     # Transform function: convert last_updated to timestamp

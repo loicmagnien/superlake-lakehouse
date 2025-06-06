@@ -114,6 +114,7 @@ def get_pipeline_objects_velov_station_status(super_spark, catalog_name, logger,
             for s in stations
         ]
         df = spark.createDataFrame(rows, schema=source_velov_station_status_schema)
+        df = df.filter(F.col("station_id").isNotNull())
         return df
 
     # Transform function: convert ints to booleans and epoch to timestamps

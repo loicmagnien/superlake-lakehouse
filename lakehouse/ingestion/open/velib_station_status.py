@@ -118,6 +118,7 @@ def get_pipeline_objects_velib_station_status(super_spark, catalog_name, logger,
             ),
             order_by="numbikesavailable desc"
         )
+        df = df.filter(F.col("stationcode").isNotNull())
         df = df.withColumn("timestamp", F.current_timestamp().cast(T.TimestampType()))
         df = df.select([f.name for f in source_velib_status_schema.fields])
         return df

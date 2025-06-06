@@ -95,6 +95,7 @@ def get_pipeline_objects_velib_station_info(super_spark, catalog_name, logger, m
             batch_size=100,
             select="stationcode,name,capacity,coordonnees_geo,station_opening_hours"
         )
+        df = df.filter(F.col("stationcode").isNotNull())
         df = df.withColumn("timestamp", F.current_timestamp().cast(T.TimestampType()))
         df = df.select([f.name for f in source_velib_station_info_schema.fields])
         return df
