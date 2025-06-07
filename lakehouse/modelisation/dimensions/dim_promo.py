@@ -8,7 +8,7 @@ def get_model_dim_promo(super_spark, catalog_name, logger, managed, superlake_dt
     dim_promo = SuperDeltaTable(
         super_spark=super_spark,
         catalog_name=catalog_name,
-        schema_name="04_dwh",
+        schema_name="03_gold",
         table_name="dim_promo",
         table_schema=T.StructType([
             T.StructField("promo_key", T.StringType(), False, {"description": "Unique key of the promo"}),

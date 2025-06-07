@@ -9,7 +9,7 @@ def get_model_fact_bike_status(super_spark, catalog_name, logger, managed, super
     fact_bike_status = SuperDeltaTable(
         super_spark=super_spark,
         catalog_name=catalog_name,
-        schema_name="04_dwh",
+        schema_name="03_gold",
         table_name="fact_bike_status",
         table_schema=T.StructType([
             T.StructField("station_key", T.StringType(), False, {"description": "Unique key of the station"}),
@@ -39,13 +39,13 @@ def get_model_fact_bike_status(super_spark, catalog_name, logger, managed, super
         foreign_keys=[
             {
                 "fk_columns": ["station_key"],
-                "ref_table": f"{catalog_name}.04_dwh.dim_bike_station",
+                "ref_table": f"{catalog_name}.03_gold.dim_bike_station",
                 "ref_columns": ["station_key"],
                 "fk_name": None
             },
             {
                 "fk_columns": ["date_key"],
-                "ref_table": f"{catalog_name}.04_dwh.dim_date",
+                "ref_table": f"{catalog_name}.03_gold.dim_date",
                 "ref_columns": ["date_key"],
                 "fk_name": None
             },

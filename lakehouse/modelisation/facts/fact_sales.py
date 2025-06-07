@@ -10,7 +10,7 @@ def get_model_fact_sales(super_spark, catalog_name, logger, managed, superlake_d
     fact_sales = SuperDeltaTable(
         super_spark=super_spark,
         catalog_name=catalog_name,
-        schema_name="04_dwh",
+        schema_name="03_gold",
         table_name="fact_sales",
         table_schema=T.StructType([
             T.StructField("sales_key", T.StringType(), False, {"description": "Unique key of the sales"}),
@@ -41,31 +41,31 @@ def get_model_fact_sales(super_spark, catalog_name, logger, managed, superlake_d
         foreign_keys=[
             {
                 "fk_columns": ["date_key"],
-                "ref_table": f"{catalog_name}.04_dwh.dim_date",
+                "ref_table": f"{catalog_name}.03_gold.dim_date",
                 "ref_columns": ["date_key"],
                 "fk_name": None
             },
             {
                 "fk_columns": ["customer_key"],
-                "ref_table": f"{catalog_name}.04_dwh.dim_customer",
+                "ref_table": f"{catalog_name}.03_gold.dim_customer",
                 "ref_columns": ["customer_key"],
                 "fk_name": None
             },
             {
                 "fk_columns": ["product_key"],
-                "ref_table": f"{catalog_name}.04_dwh.dim_product",
+                "ref_table": f"{catalog_name}.03_gold.dim_product",
                 "ref_columns": ["product_key"],
                 "fk_name": None
             },
             {
                 "fk_columns": ["store_key"],
-                "ref_table": f"{catalog_name}.04_dwh.dim_store",
+                "ref_table": f"{catalog_name}.03_gold.dim_store",
                 "ref_columns": ["store_key"],
                 "fk_name": None
             },
             {
                 "fk_columns": ["promo_key"],
-                "ref_table": f"{catalog_name}.04_dwh.dim_promo",
+                "ref_table": f"{catalog_name}.03_gold.dim_promo",
                 "ref_columns": ["promo_key"],
                 "fk_name": None
             },

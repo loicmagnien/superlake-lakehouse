@@ -9,7 +9,7 @@ def get_model_dim_bike_station(super_spark, catalog_name, logger, managed, super
     dim_bike_station = SuperDeltaTable(
         super_spark=super_spark,
         catalog_name=catalog_name,
-        schema_name="04_dwh",
+        schema_name="03_gold",
         table_name="dim_bike_station",
         table_schema=T.StructType([
             T.StructField("station_key", T.StringType(), False, {"description": "Unique key of the station"}),

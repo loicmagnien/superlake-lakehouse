@@ -9,16 +9,19 @@ from datetime import datetime
 def get_superlake_objects():
 
     # ------------------------------------ databricks hive metastore --------------------------------------
-    warehouse_dir = "dbfs:/user/hive/warehouse"
-    external_path = '/mnt/data/external-table/'
-    catalog_name = "spark_catalog"
+    # use this for databricks hive metastore
+    warehouse_dir = "dbfs:/user/hive/warehouse"  # databricks hive metastore in the dbfs
+    external_path = '/mnt/data/external-table/'  # databricks external mount point
+    catalog_name = "spark_catalog"               # databricks "hive_metastore" alias is "spark_catalog"
 
     # ------------------------------------------- unity catalog -------------------------------------------
+    # use this if your databricks setup is using unity catalog (spark.sql("SHOW EXTERNAL LOCATIONS"))
     warehouse_dir = "abfss://container@unity_catalog_storage_account.dfs.core.windows.net/UUID/"
     external_path = 'abfss://container@data_storage_account.dfs.core.windows.net/superlake/data/external-table/'
     catalog_name = "my_unity_catalog"
 
     # -------------------------------------------- local spark --------------------------------------------
+    # use this for local spark setup
     warehouse_dir = "./data/spark-warehouse"
     external_path = "./data/external-table/"
     catalog_name = "spark_catalog"
@@ -35,12 +38,12 @@ def get_superlake_objects():
 
     # Display the parameters
     print("-----------------------------------------------------------------------------", flush=True)
-    print(f"project root: {project_root}", flush=True)
+    print(f"project root:  {project_root}", flush=True)
     print(f"warehouse dir: {warehouse_dir}", flush=True)
     print(f"external path: {external_path}", flush=True)
-    print(f"catalog name: {catalog_name}", flush=True)
-    print(f"managed: {managed}", flush=True)
-    print(f"environment: {environment}", flush=True)
+    print(f"catalog name:  {catalog_name}", flush=True)
+    print(f"managed:       {managed}", flush=True)
+    print(f"environment:   {environment}", flush=True)
     print("-----------------------------------------------------------------------------", flush=True)
 
     # ---------------------------------------------------

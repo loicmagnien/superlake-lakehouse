@@ -8,7 +8,7 @@ def get_model_dim_date(super_spark, catalog_name, logger, managed, superlake_dt)
     dim_date = SuperDeltaTable(
         super_spark=super_spark,
         catalog_name=catalog_name,
-        schema_name="04_dwh",
+        schema_name="03_gold",
         table_name="dim_date",
         table_schema=T.StructType([
             T.StructField("date_key", T.StringType(), False, {"description": "Unique key of the date"}),

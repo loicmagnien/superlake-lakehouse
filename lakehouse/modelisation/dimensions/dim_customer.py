@@ -10,7 +10,7 @@ def get_model_dim_customer(super_spark, catalog_name, logger, managed, superlake
     dim_customer = SuperDeltaTable(
         super_spark=super_spark,
         catalog_name=catalog_name,
-        schema_name="04_dwh",
+        schema_name="03_gold",
         table_name="dim_customer",
         table_schema=T.StructType([
             T.StructField("customer_key", T.StringType(), False, {"description": "Unique key of the customer"}),
