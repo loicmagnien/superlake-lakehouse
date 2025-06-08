@@ -30,11 +30,6 @@ if __name__ == "__main__":
     super_tracer.generate_trace_table()
     super_catalog_quality_table.ensure_table_exists()
 
-    # (p)re-create all tables in the catalog
-    super_cataloguer.ensure_tables_exist(
-        super_spark, catalog_name, logger, managed, superlake_dt
-    )
-
     # Apply table comments
     super_cataloguer.apply_table_comment(
         super_spark, catalog_name, logger, managed, superlake_dt,

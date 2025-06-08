@@ -29,8 +29,10 @@ def get_pipeline_objects_erp_sales_transactions(super_spark, catalog_name, logge
     ])
 
     # add superlake_dt to the schema for bronze and silver tables
-    erp_sales_transactions_schema = source_erp_sales_transactions_schema.add(
-        T.StructField("superlake_dt", T.TimestampType(), True, {"description": "Timestamp of the data ingestion"})
+    erp_sales_transactions_schema = T.StructType(
+        source_erp_sales_transactions_schema.fields + [
+            T.StructField("superlake_dt", T.TimestampType(), True, {"description": "Timestamp of the data ingestion"})
+        ]
     )
 
     # bronze table

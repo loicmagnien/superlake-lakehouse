@@ -24,8 +24,10 @@ def get_pipeline_objects_crm_contacts(super_spark, catalog_name, logger, managed
     ])
 
     # add superlake_dt to the schema for bronze and silver tables
-    crm_contacts_schema = source_crm_contacts_schema.add(
-        T.StructField("superlake_dt", T.TimestampType(), True, {"description": "Timestamp of the data ingestion"})
+    crm_contacts_schema = T.StructType(
+        source_crm_contacts_schema.fields + [
+            T.StructField("superlake_dt", T.TimestampType(), True, {"description": "Timestamp of the data ingestion"})
+        ]
     )
 
     # bronze table

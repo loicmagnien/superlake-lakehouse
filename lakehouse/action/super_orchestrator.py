@@ -26,16 +26,11 @@ if __name__ == "__main__":
     #              Operations start here
     # ---------------------------------------------------
 
-    # pre-create tthe trace a catalog quality tables
+    # pre-create the trace and catalog quality tables
     super_tracer.generate_trace_table()
     super_catalog_quality_table.ensure_table_exists()
 
-    # pre-create all tables in the catalog
-    super_cataloguer.ensure_tables_exist(
-        super_spark, catalog_name, logger, managed, superlake_dt
-    )
-
-    # Run a full load (also creates the tables on the fly)
+    # Run a full load (creates the tables on the fly)
     super_orchestrator.orchestrate(
         loading_mode='file',
         orchestration_mode='process_first',

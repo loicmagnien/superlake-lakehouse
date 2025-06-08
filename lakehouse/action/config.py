@@ -1,8 +1,6 @@
 from os.path import abspath, dirname, join
-from superlake.core import SuperSpark, SuperTracer
-from superlake.core.orchestration import SuperOrchestrator
+from superlake.core import SuperSpark, SuperTracer, SuperOrchestrator, SuperCataloguer, SuperCatalogQualityTable
 from superlake.monitoring import SuperLogger
-from superlake.core.catalog import SuperCataloguer, SuperCatalogQualityTable
 from datetime import datetime
 
 
@@ -96,7 +94,7 @@ def get_superlake_objects():
         schema_name="00_superlake",
         table_name="super_catalog_quality",
         managed=managed,
-        logger=logger if logger is not None else SuperLogger(name='DefaultLogger')
+        logger=logger
     )
 
     return {
