@@ -30,32 +30,50 @@ if __name__ == "__main__":
     super_tracer.generate_trace_table()
     super_catalog_quality_table.ensure_table_exists()
 
+    # filter tables to apply operations on
+    target_tables = [
+        # dimensions
+        "spark_catalog.03_gold.dim_bike_station",
+        "spark_catalog.03_gold.dim_customer",
+        "spark_catalog.03_gold.dim_date",
+        "spark_catalog.03_gold.dim_product",
+        "spark_catalog.03_gold.dim_promo",
+        "spark_catalog.03_gold.dim_store",
+        # facts
+        "spark_catalog.03_gold.fact_sales",
+        "spark_catalog.03_gold.fact_bike_status",
+    ]
+
     # Apply table comments
     super_cataloguer.apply_table_comment(
         super_spark, catalog_name, logger, managed, superlake_dt,
         persist_catalog_quality=True,
-        super_catalog_quality_table=super_catalog_quality_table
+        super_catalog_quality_table=super_catalog_quality_table,
+        target_tables=target_tables
     )
 
     # Apply column comments
     super_cataloguer.apply_columns_comments(
         super_spark, catalog_name, logger, managed, superlake_dt,
         persist_catalog_quality=True,
-        super_catalog_quality_table=super_catalog_quality_table
+        super_catalog_quality_table=super_catalog_quality_table,
+        target_tables=target_tables
     )
 
     # Drop all foreign keys
     super_cataloguer.drop_foreign_keys(
         super_spark, catalog_name, logger, managed, superlake_dt,
         persist_catalog_quality=True,
-        super_catalog_quality_table=super_catalog_quality_table
+        super_catalog_quality_table=super_catalog_quality_table,
+        target_tables=target_tables
     )
 
     # Drop all primary keys
     super_cataloguer.drop_primary_keys(
         super_spark, catalog_name, logger, managed, superlake_dt,
         persist_catalog_quality=True,
-        super_catalog_quality_table=super_catalog_quality_table
+        super_catalog_quality_table=super_catalog_quality_table,
+        target_tables=target_tables
     )
 
     # Create all primary keys
@@ -63,7 +81,8 @@ if __name__ == "__main__":
         super_spark, catalog_name, logger, managed, superlake_dt,
         force_create_primary_keys=True,
         persist_catalog_quality=True,
-        super_catalog_quality_table=super_catalog_quality_table
+        super_catalog_quality_table=super_catalog_quality_table,
+        target_tables=target_tables
     )
 
     # Create all foreign keys
@@ -71,5 +90,6 @@ if __name__ == "__main__":
         super_spark, catalog_name, logger, managed, superlake_dt,
         force_create_foreign_keys=True,
         persist_catalog_quality=True,
-        super_catalog_quality_table=super_catalog_quality_table
+        super_catalog_quality_table=super_catalog_quality_table,
+        target_tables=target_tables
     )

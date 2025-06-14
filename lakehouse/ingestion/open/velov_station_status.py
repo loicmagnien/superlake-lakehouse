@@ -92,29 +92,33 @@ def get_pipeline_objects_velov_station_status(super_spark, catalog_name, logger,
 
     # CDC function: fetch from API and return as Spark DataFrame
     def velov_station_status_cdc(spark):
-        status_url = 'https://download.data.grandlyon.com/files/rdata/jcd_jcdecaux.jcdvelov/station_status.json'
-        response = requests.get(status_url)
-        data = response.json()
-        last_updated = int(data['last_updated'])
-        stations = data['data']['stations']
-        # Prepare rows for DataFrame, casting to correct types
-        rows = [
-            (
-                int(s['station_id']),
-                int(last_updated),
-                int(s['num_bikes_available']),
-                int(s['num_bikes_disabled']),
-                int(s['num_docks_available']),
-                int(s['num_docks_disabled']),
-                int(s['is_installed']),
-                int(s['is_renting']),
-                int(s['is_returning']),
-                int(s['last_reported'])
-            )
-            for s in stations
-        ]
-        df = spark.createDataFrame(rows, schema=source_velov_station_status_schema)
-        df = df.filter(F.col("station_id").isNotNull())
+        try:
+            status_url = 'https://download.data.grandlyon.com/files/rdata/jcd_jcdecaux.jcdvelov/station_status.json'
+            response = requests.get(status_url)
+            data = response.json()
+            last_updated = int(data['last_updated'])
+            stations = data['data']['stations']
+            # Prepare rows for DataFrame, casting to correct types
+            rows = [
+                (
+                    int(s['station_id']),
+                    int(last_updated),
+                    int(s['num_bikes_available']),
+                    int(s['num_bikes_disabled']),
+                    int(s['num_docks_available']),
+                    int(s['num_docks_disabled']),
+                    int(s['is_installed']),
+                    int(s['is_renting']),
+                    int(s['is_returning']),
+                    int(s['last_reported'])
+                )
+                for s in stations
+            ]
+            df = spark.createDataFrame(rows, schema=source_velov_station_status_schema)
+            df = df.filter(F.col("station_id").isNotNull())
+        except Exception:
+            logger.error("Could not retrieve the data.")
+            df = spark.createDataFrame([], source_velov_station_status_schema)
         return df
 
     # Transform function: convert ints to booleans and epoch to timestamps

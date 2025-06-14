@@ -102,25 +102,29 @@ def get_pipeline_objects_velib_station_status(super_spark, catalog_name, logger,
 
     # CDC function: fetch from API and return as Spark DataFrame
     def velib_status_cdc(spark):
-        domain = "opendata.paris.fr"
-        dataset_id = "velib-disponibilite-en-temps-reel"
-        df = load_opendatasoft_dataset_to_spark(
-            domain=domain,
-            dataset_id=dataset_id,
-            spark=spark,
-            schema=source_velib_status_schema,
-            batch_size=100,
-            select=(
-                "stationcode,name,is_installed,numdocksavailable,"
-                "numbikesavailable,mechanical,ebike,is_renting,is_returning,"
-                "duedate,coordonnees_geo,nom_arrondissement_communes,"
-                "code_insee_commune,station_opening_hours"
-            ),
-            order_by="numbikesavailable desc"
-        )
-        df = df.filter(F.col("stationcode").isNotNull())
-        df = df.withColumn("timestamp", F.current_timestamp().cast(T.TimestampType()))
-        df = df.select([f.name for f in source_velib_status_schema.fields])
+        try:
+            domain = "opendata.paris.fr"
+            dataset_id = "velib-disponibilite-en-temps-reel"
+            df = load_opendatasoft_dataset_to_spark(
+                domain=domain,
+                dataset_id=dataset_id,
+                spark=spark,
+                schema=source_velib_status_schema,
+                batch_size=100,
+                select=(
+                    "stationcode,name,is_installed,numdocksavailable,"
+                    "numbikesavailable,mechanical,ebike,is_renting,is_returning,"
+                    "duedate,coordonnees_geo,nom_arrondissement_communes,"
+                    "code_insee_commune,station_opening_hours"
+                ),
+                order_by="numbikesavailable desc"
+            )
+            df = df.filter(F.col("stationcode").isNotNull())
+            df = df.withColumn("timestamp", F.current_timestamp().cast(T.TimestampType()))
+            df = df.select([f.name for f in source_velib_status_schema.fields])
+        except Exception:
+            logger.error("Could not retrieve the data.")
+            df = spark.createDataFrame([], source_velib_status_schema)
         return df
 
     # Transform function: convert types and fields for silver

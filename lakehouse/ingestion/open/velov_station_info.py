@@ -91,26 +91,30 @@ def get_pipeline_objects_velov_station_info(super_spark, catalog_name, logger, m
 
     # CDC function: fetch from API and return as Spark DataFrame
     def velov_station_info_cdc(spark):
-        info_url = 'https://download.data.grandlyon.com/files/rdata/jcd_jcdecaux.jcdvelov/station_information.json'
-        response = requests.get(info_url)
-        data = response.json()
-        last_updated = int(data['last_updated'])
-        stations = data['data']['stations']
-        rows = [
-            (
-                int(station['station_id']),
-                station['name'],
-                float(station['lat']),
-                float(station['lon']),
-                station['address'],
-                ','.join(station.get('rental_methods', [])),
-                int(station['capacity']),
-                last_updated
-            )
-            for station in stations
-        ]
-        df = spark.createDataFrame(rows, schema=source_velov_station_info_schema)
-        df = df.filter(F.col("station_id").isNotNull())
+        try:
+            info_url = 'https://download.data.grandlyon.com/files/rdata/jcd_jcdecaux.jcdvelov/station_information.json'
+            response = requests.get(info_url)
+            data = response.json()
+            last_updated = int(data['last_updated'])
+            stations = data['data']['stations']
+            rows = [
+                (
+                    int(station['station_id']),
+                    station['name'],
+                    float(station['lat']),
+                    float(station['lon']),
+                    station['address'],
+                    ','.join(station.get('rental_methods', [])),
+                    int(station['capacity']),
+                    last_updated
+                )
+                for station in stations
+            ]
+            df = spark.createDataFrame(rows, schema=source_velov_station_info_schema)
+            df = df.filter(F.col("station_id").isNotNull())
+        except Exception:
+            logger.error("Could not retrieve the data.")
+            df = spark.createDataFrame([], source_velov_station_info_schema)
         return df
 
     # Transform function: convert last_updated to timestamp

@@ -85,19 +85,23 @@ def get_pipeline_objects_velib_station_info(super_spark, catalog_name, logger, m
 
     # cdc function
     def velib_station_info_cdc(spark):
-        domain = "opendata.paris.fr"
-        dataset_id = "velib-emplacement-des-stations"
-        df = load_opendatasoft_dataset_to_spark(
-            domain=domain,
-            dataset_id=dataset_id,
-            spark=spark,
-            schema=source_velib_station_info_schema,
-            batch_size=100,
-            select="stationcode,name,capacity,coordonnees_geo,station_opening_hours"
-        )
-        df = df.filter(F.col("stationcode").isNotNull())
-        df = df.withColumn("timestamp", F.current_timestamp().cast(T.TimestampType()))
-        df = df.select([f.name for f in source_velib_station_info_schema.fields])
+        try:
+            domain = "opendata.paris.fr"
+            dataset_id = "velib-emplacement-des-stations"
+            df = load_opendatasoft_dataset_to_spark(
+                domain=domain,
+                dataset_id=dataset_id,
+                spark=spark,
+                schema=source_velib_station_info_schema,
+                batch_size=100,
+                select="stationcode,name,capacity,coordonnees_geo,station_opening_hours"
+            )
+            df = df.filter(F.col("stationcode").isNotNull())
+            df = df.withColumn("timestamp", F.current_timestamp().cast(T.TimestampType()))
+            df = df.select([f.name for f in source_velib_station_info_schema.fields])
+        except Exception:
+            logger.error("Could not retrieve the data.")
+            df = spark.createDataFrame([], source_velib_station_info_schema)
         return df
 
     # tra function
